@@ -131,7 +131,7 @@
       for (let i = 29; i >= 0; i--) {
         const now = new Date();
         now.setDate(now.getDate() - i);
-　　　　　const jst = new Date(now.setTime() + 9*60*60000);
+　　　　　const jst = new Date(now.getTime() + 9*60*60000);
 　　　　　const key = jst.toISOString().split("T")[0];
         
         const key = d.toISOString().split("T")[0];
