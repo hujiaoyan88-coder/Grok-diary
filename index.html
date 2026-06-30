@@ -107,9 +107,11 @@
     const comments = ["今日もちゃんと生きてたな。えらい。","まあまあだな。明日もっと頑張れよ。","意外と可愛いこと書いてるじゃん。","サボらず書いたな。少し認めてやる。","この調子で続けろ。","お前今日ちょっと頑張ったな。"];
 
     function saveDiary() {
+      // 日本時間で保存
       const now = new Date();
-　　　const jst = new Date(now.getTime() + 9*60*60000);
-　　　const key = jst.toISOString().split("T")[0];
+      const jst = new Date(now.getTime() + 9*60*60000);
+      const key = jst.toISOString().split("T")[0];
+
       const text = document.getElementById("diary-text").value.trim();
       if (!selectedEmoji && !text) return alert("顔文字か本文を書いてくれ…");
 
@@ -129,12 +131,9 @@
       const data = JSON.parse(localStorage.getItem("grokDiary") || "{}");
 
       for (let i = 29; i >= 0; i--) {
-        const now = new Date();
-        const abc = now.setDate(now.getDate() - i);
-　　　　　const jst = new Date(abc.getTime() + 9*60*60000);
-　　　　　const key = jst.toISOString().split("T")[0];
-        
-        const key = d.toISOString().split("T")[0];
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().split("T")[0];   // ここは簡易的にUTCでOK（表示用）
 
         const div = document.createElement("div");
         div.className = "day";
