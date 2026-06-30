@@ -131,17 +131,17 @@
       for (let i = 29; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        const key = d.toISOString().split("T")[0];
+        const key2 = d.toISOString().split("T")[0];
 
         const div = document.createElement("div");
         div.className = "day";
-        if (data[key]) {
+        if (data[key2]) {
           div.classList.add("has-entry");
-          div.innerHTML = `<div class="emoji">${data[key].emoji}</div><div class="date-num">${d.getDate()}</div>`;
+          div.innerHTML = `<div class="emoji">${data[key2].emoji}</div><div class="date-num">${d.getDate()}</div>`;
         } else {
           div.innerHTML = `<div class="date-num">${d.getDate()}</div>`;
         }
-        div.onclick = () => alert(data[key] ? `${key}\n${data[key].emoji} ${data[key].text}` : "まだ書いてない日だぞ");
+        div.onclick = () => alert(data[key2] ? `${key2}\n${data[key2].emoji} ${data[key].text}` : "まだ書いてない日だぞ");
         container.appendChild(div);
       }
     }
