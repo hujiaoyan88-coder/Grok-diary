@@ -26,11 +26,39 @@
     .emoji.selected { background: var(--grok-cyan); color: black; transform: scale(1.25); }
     textarea { width: 100%; height: 220px; background: #111; border: 1px solid #444; border-radius: 16px; color: white; padding: 18px; font-size: 17px; resize: none; }
     button { width: 100%; padding: 16px; font-size: 18px; font-weight: bold; background: linear-gradient(90deg, #00f5ff, #ff00cc); color: black; border: none; border-radius: 9999px; }
-    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-    .day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: left; margin-bottom: -0.5em; background: #1f1f1f; border-radius: 10px; font-size: 13px; cursor: pointer; }
-    .day.has-entry { background: rgba(0,245,255,0.2); border: 2px solid var(--grok-cyan); }
-    .day .emoji { font-size: 24px; }
-    .day .date-num { font-size: 11px; opacity: 0.8; }
+
+    /* カレンダー最終調整 */
+    .calendar { 
+      display: grid; 
+      grid-template-columns: repeat(7, 1fr); 
+      gap: 6px; 
+    }
+    .day {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1f1f1f;
+      border-radius: 10px;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+    .day.has-entry {
+      background: rgba(0, 245, 255, 0.18);
+      border: 2px solid var(--grok-cyan);
+    }
+    .day .emoji {
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 1px;
+    }
+    .day .date-num {
+      font-size: 11px;
+      opacity: 0.85;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -62,6 +90,7 @@
 
     function createEmojiPicker() {
       const container = document.getElementById("emoji-picker");
+      container.innerHTML = "";
       emojis.forEach(e => {
         const span = document.createElement("span");
         span.className = "emoji";
