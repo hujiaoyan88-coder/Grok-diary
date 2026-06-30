@@ -109,12 +109,12 @@
     function saveDiary() {
       const now = new Date();
       const jst = new Date(now.getTime() + 9*60*60000);
-      const key = jst.toISOString().split("T")[0];
+      const dateKey = jst.toISOString().split("T")[0];
       const text = document.getElementById("diary-text").value.trim();
       if (!selectedEmoji && !text) return alert("顔文字か本文を書いてくれ…");
 
       let data = JSON.parse(localStorage.getItem("grokDiary") || "{}");
-      data[key] = {emoji: selectedEmoji || "📝", text: text || "（無言の日）"};
+      data[dateKey] = {emoji: selectedEmoji || "📝", text: text || "（無言の日）"};
       localStorage.setItem("grokDiary", JSON.stringify(data));
 
       alert("保存したぞ！");
