@@ -27,14 +27,14 @@
     textarea { width: 100%; height: 220px; background: #111; border: 1px solid #444; border-radius: 16px; color: white; padding: 18px; font-size: 17px; resize: none; }
     button { width: 100%; padding: 16px; font-size: 18px; font-weight: bold; background: linear-gradient(90deg, #00f5ff, #ff00cc); color: black; border: none; border-radius: 9999px; }
     .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-    .day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1f1f1f; border-radius: 10px; font-size: 13px; cursor: pointer; }
+    .day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: left; margin-bottom: -0.5em; background: #1f1f1f; border-radius: 10px; font-size: 13px; cursor: pointer; }
     .day.has-entry { background: rgba(0,245,255,0.2); border: 2px solid var(--grok-cyan); }
     .day .emoji { font-size: 24px; }
     .day .date-num { font-size: 11px; opacity: 0.8; }
   </style>
 </head>
 <body>
-  <header><h1>GROK DIARY</h1><p>毒舌AIと3年間続ける日記</p></header>
+  <header><h1>GROK DIARY</h1><p>毒舌AIと書く日記</p></header>
   <div class="container">
     <div class="card">
       <h2 id="today-date"></h2>
