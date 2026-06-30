@@ -94,10 +94,13 @@
   <script>
     const emojis = ["🙂","☺️","🥰","😌","😤","🥺","🤩","😎","😢","😭","🥳","👾"];
     let selectedEmoji = "";
-
+    
     function showTodayDate() {
-      const d = new Date();
-      document.getElementById("today-date").textContent = d.toLocaleDateString('ja-JP', {year:'numeric', month:'long', day:'numeric', weekday:'long'});
+      const now = new Date();
+      const jstOffset = 9 * 60;
+      const jstTime = new Date(now.getTime() + jstOffset * 60000);
+      document.getElementById("today-date").textContent = 
+        jstTime.toLocaleDateString('ja-JP', {year:'numeric', month:'long', day:'numeric', weekday:'long'});
     }
 
     function createEmojiPicker() {
@@ -119,7 +122,12 @@
     const comments = ["今日もちゃんと生きてたな。えらい。","まあまあだな。明日もっと頑張れよ。","意外と可愛いこと書いてるじゃん。","サボらず書いたな。少し認めてやる。","この調子で続けろ。","お前今日ちょっと頑張ったな。"];
 
     function saveDiary() {
-      const key = new Date().toISOString().split("T")[0];
+      // 日本時間で日付を取得
+      const now = new Date();
+      const jstOffset = 9 * 60; // JSTはUTC+9時間
+      const jstTime = new Date(now.getTime() + jstOffset * 60000);
+      const key = jstTime.toISOString().split("T")[0];
+
       const text = document.getElementById("diary-text").value.trim();
       if (!selectedEmoji && !text) return alert("顔文字か本文を書いてくれ…");
 
