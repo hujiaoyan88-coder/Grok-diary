@@ -39,7 +39,6 @@
       <div id="todayTotal" class="total"></div>
     </div>
 
-    <button onclick="showGraph()">📊 月間グラフを表示 / 更新</button>
     <button onclick="exportMonthlyReport()" style="background: linear-gradient(45deg, #00ccff, #00ffaa); margin-top: 10px;">📄 今月のレポートをテキスト出力</button>
 
     <div class="card graph-card">
@@ -70,7 +69,9 @@
       alert("✅ 保存完了！\n\n" + praises[Math.floor(Math.random() * praises.length)]);
 
       renderToday();
-      document.getElementById('calories').value = '';
+      showGraph();
+
+　　　document.getElementById("calories").value = "";
     }
 
     function renderToday() {
@@ -94,6 +95,7 @@
         if (allData[date].length === 0) delete allData[date];
         saveData(allData);
         renderToday();
+        showGraph();
       }
     }
 
@@ -181,7 +183,10 @@
       alert("✅ レポートをダウンロードしました！（文字化け対策済）");
     }
 
-    dateInput.addEventListener('change', renderToday);
+    dateInput.addEventListener("change", () => {
+    renderToday();
+    showGraph();
+　　　});
     window.addEventListener("load", () => {
     renderToday();
 
