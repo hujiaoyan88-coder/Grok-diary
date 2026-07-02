@@ -109,12 +109,19 @@
         type: 'line',
         data: {
           labels: dates,
-          datasets: [{ label: '1日の合計カロリー', data: totals, borderColor: '#00ffcc', backgroundColor: 'rgba(0, 255, 204, 0.25)', tension: 0.4, borderWidth: 4 }]
+          datasets: [{ 
+            label: '1日の合計カロリー', 
+            data: totals, 
+            borderColor: '#00ffcc', 
+            backgroundColor: 'rgba(0, 255, 204, 0.25)', 
+            tension: 0.4, 
+            borderWidth: 4 
+          }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: false,           // ← アニメーション完全OFF
+          animation: { duration: 0 },   // アニメーション完全無効
           plugins: { legend: { labels: { color: '#a5f3fc' } } },
           scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' }, beginAtZero: true } }
         }
@@ -125,7 +132,8 @@
       const allData = getData();
       const now = new Date();
       const currentMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2, '0');
-      let report = `【GROK CALORIE 月間レポート】\n対象月: ${currentMonth}\n出力日: ${now.toLocaleDateString('ja-JP')}\n\n====================================\n\n`;
+      
+      let report = `【GROK CALORIE 月間レポート】\r\n対象月: ${currentMonth}\r\n出力日: ${now.toLocaleDateString('ja-JP')}\r\n\r\n====================================\r\n\r\n`;
 
       let monthlyTotal = 0, dayCount = 0;
       const sortedDates = Object.keys(allData).filter(d => d.startsWith(currentMonth)).sort();
@@ -134,25 +142,28 @@
         const entries = allData[date];
         const daily = entries.reduce((sum, e) => sum + e.cal, 0);
         monthlyTotal += daily; dayCount++;
-        report += `${date} (${daily} kcal)\n`;
-        entries.forEach(e => report += `   ${e.type}: ${e.cal} kcal\n`);
-        report += `\n`;
+        report += `${date} (${daily} kcal)\r\n`;
+        entries.forEach(e => report += `   ${e.type}: ${e.cal} kcal\r\n`);
+        report += `\r\n`;
       });
 
       if (dayCount === 0) return alert("今月のデータがないぞ！");
 
-      report += `====================================\n記録日数: ${dayCount}日\n合計: ${monthlyTotal} kcal\n1日平均: ${Math.round(monthlyTotal/dayCount)} kcal`;
+      report += `====================================\r\n記録日数: ${dayCount}日\r\n合計: ${monthlyTotal} kcal\r\n1日平均: ${Math.round(monthlyTotal/dayCount)} kcal`;
 
-      const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `grok-report_${currentMonth}.txt`;
-      a.click();
-      alert("✅ レポートをダウンロードしました！");
+      const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `grok-report_${currentMonth}.txt`;
+      link.click();
+      alert("✅ レポートをダウンロードしました！（文字化け対策済）");
     }
 
     dateInput.addEventListener('change', renderToday);
-    window.onload = () => { renderToday(); setTimeout(showGraph, 600); };
+    window.onload = () => { 
+      renderToday(); 
+      setTimeout(showGraph, 800); 
+    };
   </script>
 </body>
 </html>
