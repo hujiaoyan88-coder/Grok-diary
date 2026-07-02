@@ -8,15 +8,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono&display=swap');
     
-    body {
-      font-family: 'Roboto Mono', sans-serif;
-      background: #0a0a0f;
-      color: #00ffcc;
-      margin: 0;
-      padding: 12px;
-      min-height: 100vh;
-      background-image: radial-gradient(circle at 50% 30%, rgba(0, 255, 204, 0.1) 0%, transparent 60%);
-    }
+    body { font-family: 'Roboto Mono', sans-serif; background: #0a0a0f; color: #00ffcc; margin: 0; padding: 12px; min-height: 100vh; background-image: radial-gradient(circle at 50% 30%, rgba(0, 255, 204, 0.1) 0%, transparent 60%); }
     h1 { text-align: center; font-family: 'Orbitron', sans-serif; font-size: 1.95em; background: linear-gradient(90deg, #00ffcc, #00bbff); -webkit-background-clip: text; color: transparent; margin: 10px 0 20px; text-shadow: 0 0 25px #00ffcc; }
     .container { max-width: 420px; margin: 0 auto; }
     .card { background: rgba(15, 23, 42, 0.96); border: 1px solid #00ffcc; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 0 25px rgba(0, 255, 204, 0.25); }
@@ -26,18 +18,8 @@
     .entry { background: #1e2937; padding: 13px 15px; margin: 8px 0; border-radius: 10px; border-left: 5px solid #00ffcc; display: flex; justify-content: space-between; align-items: center; font-size: 1.05em; }
     .delete { color: #ff3366; font-size: 1.4em; font-weight: bold; padding: 0 8px; }
     .total { font-size: 1.85em; text-align: center; margin: 20px 0; color: #67f7cc; text-shadow: 0 0 20px #00ffcc; }
-
-    /* グラフ専用修正 */
-    .graph-card {
-      height: 320px;           /* スマホでも十分な高さ確保 */
-      position: relative;
-    }
-    canvas {
-      width: 100% !important;
-      height: 100% !important;
-      border-radius: 12px;
-      background: #0f172a;
-    }
+    .graph-card { height: 340px; position: relative; }
+    canvas { width: 100% !important; height: 100% !important; border-radius: 12px; background: #0f172a; }
   </style>
 </head>
 <body>
@@ -46,12 +28,7 @@
 
     <div class="card">
       <input type="date" id="date">
-      <select id="mealType">
-        <option value="朝">朝</option>
-        <option value="昼">昼</option>
-        <option value="夕">夕</option>
-        <option value="間食">間食</option>
-      </select>
+      <select id="mealType"><option value="朝">朝</option><option value="昼">昼</option><option value="夕">夕</option><option value="間食">間食</option></select>
       <input type="number" id="calories" placeholder="カロリー入力" inputmode="numeric">
       <button onclick="addMeal()">＋ 記録する</button>
     </div>
@@ -62,11 +39,8 @@
     </div>
 
     <button onclick="showGraph()">📊 月間グラフを表示 / 更新</button>
-    <button onclick="exportMonthlyReport()" style="background: linear-gradient(45deg, #00ccff, #00ffaa); margin-top: 10px;">
-      📄 今月のレポートをテキスト出力
-    </button>
+    <button onclick="exportMonthlyReport()" style="background: linear-gradient(45deg, #00ccff, #00ffaa); margin-top: 10px;">📄 今月のレポートをテキスト出力</button>
 
-    <!-- グラフ専用カード -->
     <div class="card graph-card">
       <canvas id="myChart"></canvas>
     </div>
@@ -104,12 +78,10 @@
       const entries = allData[date] || [];
       let html = `<h3 style="margin:8px 0 12px;">${date}</h3>`;
       let total = 0;
-
       entries.forEach((entry, i) => {
         total += entry.cal;
         html += `<div class="entry"><span>${entry.type}　<b>${entry.cal}</b> kcal</span><span class="delete" onclick="deleteEntry('${date}', ${i})">×</span></div>`;
       });
-
       document.getElementById('todayLog').innerHTML = html || '<p style="color:#64748b; text-align:center;">まだ記録なし</p>';
       document.getElementById('todayTotal').innerHTML = `合計 <b>${total}</b> kcal`;
     }
@@ -128,35 +100,23 @@
       const allData = getData();
       const dates = Object.keys(allData).sort();
       const totals = dates.map(d => allData[d].reduce((sum, e) => sum + e.cal, 0));
-
       if (dates.length === 0) return alert("まだデータがないぞ");
 
       const ctx = document.getElementById('myChart');
-
       if (myChartInstance) myChartInstance.destroy();
 
       myChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
           labels: dates,
-          datasets: [{
-            label: '1日の合計カロリー',
-            data: totals,
-            borderColor: '#00ffcc',
-            backgroundColor: 'rgba(0, 255, 204, 0.25)',
-            tension: 0.4,
-            borderWidth: 4,
-            pointRadius: 5
-          }]
+          datasets: [{ label: '1日の合計カロリー', data: totals, borderColor: '#00ffcc', backgroundColor: 'rgba(0, 255, 204, 0.25)', tension: 0.4, borderWidth: 4 }]
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,   // これ重要
-          plugins: { legend: { labels: { color: '#a5f3fc', font: { size: 14 } } } },
-          scales: {
-            x: { ticks: { color: '#94a3b8' } },
-            y: { ticks: { color: '#94a3b8' }, beginAtZero: true, grid: { color: '#334155' } }
-          }
+          maintainAspectRatio: false,
+          animation: false,           // ← アニメーション完全OFF
+          plugins: { legend: { labels: { color: '#a5f3fc' } } },
+          scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' }, beginAtZero: true } }
         }
       });
     }
@@ -165,10 +125,11 @@
       const allData = getData();
       const now = new Date();
       const currentMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2, '0');
-      let report = `【GROK CALORIE 月間レポート】\n対象月: ${currentMonth}\n\n`;
-      let monthlyTotal = 0, dayCount = 0;
+      let report = `【GROK CALORIE 月間レポート】\n対象月: ${currentMonth}\n出力日: ${now.toLocaleDateString('ja-JP')}\n\n====================================\n\n`;
 
+      let monthlyTotal = 0, dayCount = 0;
       const sortedDates = Object.keys(allData).filter(d => d.startsWith(currentMonth)).sort();
+
       sortedDates.forEach(date => {
         const entries = allData[date];
         const daily = entries.reduce((sum, e) => sum + e.cal, 0);
@@ -179,21 +140,19 @@
       });
 
       if (dayCount === 0) return alert("今月のデータがないぞ！");
-      report += `====================================\n記録日数: ${dayCount}日\n合計: ${monthlyTotal} kcal\n平均: ${Math.round(monthlyTotal/dayCount)} kcal`;
 
-      const blob = new Blob([report], {type: 'text/plain'});
+      report += `====================================\n記録日数: ${dayCount}日\n合計: ${monthlyTotal} kcal\n1日平均: ${Math.round(monthlyTotal/dayCount)} kcal`;
+
+      const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = `grok-report_${currentMonth}.txt`;
       a.click();
-      alert("レポートを出力したぞ！");
+      alert("✅ レポートをダウンロードしました！");
     }
 
     dateInput.addEventListener('change', renderToday);
-    window.onload = () => {
-      renderToday();
-      setTimeout(showGraph, 500);   // 少し遅らせて確実に描画
-    };
+    window.onload = () => { renderToday(); setTimeout(showGraph, 600); };
   </script>
 </body>
 </html>
