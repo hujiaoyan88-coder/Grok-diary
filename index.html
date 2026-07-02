@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>GROK CALORIE</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono&display=swap');
     
@@ -19,7 +19,8 @@
     .delete { color: #ff3366; font-size: 1.4em; font-weight: bold; padding: 0 8px; }
     .total { font-size: 1.85em; text-align: center; margin: 20px 0; color: #67f7cc; text-shadow: 0 0 20px #00ffcc; }
     .graph-card { height: 340px; position: relative; }
-    canvas { width: 100% !important; height: 100% !important; border-radius: 12px; background: #0f172a; }
+    canvas { width:100% !important;
+    height:320px !important;; border-radius: 12px; background: #0f172a; }
   </style>
 </head>
 <body>
@@ -151,7 +152,12 @@
 
       report += `====================================\r\n記録日数: ${dayCount}日\r\n合計: ${monthlyTotal} kcal\r\n1日平均: ${Math.round(monthlyTotal/dayCount)} kcal`;
 
-      const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+      const bom = new Uint8Array([0xEF,0xBB,0xBF]);
+
+　　　const blob = new Blob(
+    　[bom, report],
+   　 {type:"text/plain;charset=utf-8;"}
+　　　);
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `grok-report_${currentMonth}.txt`;
@@ -160,10 +166,13 @@
     }
 
     dateInput.addEventListener('change', renderToday);
-    window.onload = () => { 
-      renderToday(); 
-      setTimeout(showGraph, 800); 
-    };
+    window.onload = () => {
+    renderToday();
+}
+      window.onload = function(){
+    renderToday();
+    showGraph();
+};
   </script>
 </body>
 </html>
