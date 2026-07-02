@@ -20,7 +20,7 @@
     .total { font-size: 1.85em; text-align: center; margin: 20px 0; color: #67f7cc; text-shadow: 0 0 20px #00ffcc; }
     .graph-card { height: 340px; position: relative; }
     canvas { width:100% !important;
-    height:320px !important; border-radius: 12px; background: #0f172a; display:block;}
+    max-height:340px !important; border-radius: 12px; background: #0f172a; display:block;}
   </style>
 </head>
 <body>
@@ -104,11 +104,12 @@
       if (dates.length === 0) return alert("まだデータがないぞ");
 
       const canvas = document.getElementById("myChart");
-　　　const ctx = canvas.getContext("2d");
 
-　　　if(myChartInstance){
-   　　　 myChartInstance.destroy();
+　　　if (myChartInstance) {
+   　 myChartInstance.destroy();
 　　　}
+
+　　　const ctx = canvas.getContext("2d");
 
       myChartInstance = new Chart(ctx, {
         type: 'line',
@@ -125,11 +126,18 @@
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: true,
           animation: false,   // アニメーション完全無効
           plugins: { legend: { labels: { color: '#a5f3fc' } } },
           scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' }, beginAtZero: true } }
         }
+
+        setTimeout(() => {
+         if (myChartInstance) {
+          myChartInstance.resize();
+         }
+        }, 100);
+        
       });
     }
 
