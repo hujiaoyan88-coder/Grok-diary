@@ -20,7 +20,7 @@
     .total { font-size: 1.85em; text-align: center; margin: 20px 0; color: #67f7cc; text-shadow: 0 0 20px #00ffcc; }
     .graph-card { height: 340px; position: relative; }
     canvas { width:100% !important;
-    height:320px !important;; border-radius: 12px; background: #0f172a; }
+    height:320px !important; border-radius: 12px; background: #0f172a; display:block;}
   </style>
 </head>
 <body>
@@ -103,8 +103,12 @@
       const totals = dates.map(d => allData[d].reduce((sum, e) => sum + e.cal, 0));
       if (dates.length === 0) return alert("まだデータがないぞ");
 
-      const ctx = document.getElementById('myChart');
-      if (myChartInstance) myChartInstance.destroy();
+      const canvas = document.getElementById("myChart");
+　　　const ctx = canvas.getContext("2d");
+
+　　　if(myChartInstance){
+   　　　 myChartInstance.destroy();
+　　　}
 
       myChartInstance = new Chart(ctx, {
         type: 'line',
@@ -122,7 +126,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 0 },   // アニメーション完全無効
+          animation: false,   // アニメーション完全無効
           plugins: { legend: { labels: { color: '#a5f3fc' } } },
           scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' }, beginAtZero: true } }
         }
@@ -161,18 +165,22 @@
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `grok-report_${currentMonth}.txt`;
+      if(/iPhone|iPad|Android/i.test(navigator.userAgent)){
+      window.open(link.href);
+      }else{
       link.click();
+      }
       alert("✅ レポートをダウンロードしました！（文字化け対策済）");
     }
 
     dateInput.addEventListener('change', renderToday);
-    window.onload = () => {
+    window.addEventListener("load", () => {
     renderToday();
-}
-      window.onload = function(){
-    renderToday();
-    showGraph();
-};
+
+    requestAnimationFrame(() => {
+        showGraph();
+    });
+});
   </script>
 </body>
 </html>
