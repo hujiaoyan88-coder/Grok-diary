@@ -26,7 +26,18 @@
     .entry { background: #1e2937; padding: 13px 15px; margin: 8px 0; border-radius: 10px; border-left: 5px solid #00ffcc; display: flex; justify-content: space-between; align-items: center; font-size: 1.05em; }
     .delete { color: #ff3366; font-size: 1.4em; font-weight: bold; padding: 0 8px; }
     .total { font-size: 1.85em; text-align: center; margin: 20px 0; color: #67f7cc; text-shadow: 0 0 20px #00ffcc; }
-    canvas { border-radius: 12px; margin-top: 15px; background: #0f172a; }
+
+    /* グラフ専用修正 */
+    .graph-card {
+      height: 320px;           /* スマホでも十分な高さ確保 */
+      position: relative;
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      border-radius: 12px;
+      background: #0f172a;
+    }
   </style>
 </head>
 <body>
@@ -55,8 +66,9 @@
       📄 今月のレポートをテキスト出力
     </button>
 
-    <div class="card">
-      <canvas id="myChart" height="260"></canvas>
+    <!-- グラフ専用カード -->
+    <div class="card graph-card">
+      <canvas id="myChart"></canvas>
     </div>
   </div>
 
@@ -121,10 +133,7 @@
 
       const ctx = document.getElementById('myChart');
 
-      // 既存のグラフをちゃんと破棄
-      if (myChartInstance) {
-        myChartInstance.destroy();
-      }
+      if (myChartInstance) myChartInstance.destroy();
 
       myChartInstance = new Chart(ctx, {
         type: 'line',
@@ -142,7 +151,7 @@
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: false,   // これ重要
           plugins: { legend: { labels: { color: '#a5f3fc', font: { size: 14 } } } },
           scales: {
             x: { ticks: { color: '#94a3b8' } },
@@ -183,8 +192,7 @@
     dateInput.addEventListener('change', renderToday);
     window.onload = () => {
       renderToday();
-      // 初回にグラフも少し表示しておく
-      setTimeout(showGraph, 300);
+      setTimeout(showGraph, 500);   // 少し遅らせて確実に描画
     };
   </script>
 </body>
